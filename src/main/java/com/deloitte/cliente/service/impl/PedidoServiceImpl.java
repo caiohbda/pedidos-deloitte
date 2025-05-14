@@ -46,10 +46,15 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         Pedido pedido = PedidoFactory.fromDTO(dto, cliente, produtos);
-        Pedido salvo = pedidoRepository.save(pedido);
 
+        double valorTotal = calcularValorTotal(produtos);
+
+        pedido.setValorTotal(valorTotal);
+
+        Pedido salvo = pedidoRepository.save(pedido);
         return PedidoFactory.fromEntity(salvo);
     }
+
 
     @Override
     public List<PedidoDTO> listarTodos() {
@@ -80,8 +85,6 @@ public class PedidoServiceImpl implements PedidoService {
 
         List<Produto> produtos = produtoRepository.findAllById(produtoIds);
 
-
-
         if (produtos.isEmpty()) {
             throw new RuntimeException("Produtos não encontrados");
         }
@@ -102,5 +105,13 @@ public class PedidoServiceImpl implements PedidoService {
             throw new RuntimeException("Pedido não encontrado");
         }
         pedidoRepository.deleteById(id);
+    }
+
+    private double calcularValorTotal(List<Produto> produtos) {
+        return Math.round(
+                produtos.stream()
+                        .mapToDouble(Produto::getValor)
+                        .sum() * 100.0
+        ) / 100.0;
     }
 }

@@ -28,4 +28,6 @@ public class Pedido {
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
+
+    private double valorTotal;
 }
