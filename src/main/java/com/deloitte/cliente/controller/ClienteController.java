@@ -26,7 +26,7 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.listarTodos());
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<ClienteDTO> update(@PathVariable Long id, @RequestBody ClienteDTO dto) {
         return ResponseEntity.ok(clienteService.editar(id, dto));
     }
