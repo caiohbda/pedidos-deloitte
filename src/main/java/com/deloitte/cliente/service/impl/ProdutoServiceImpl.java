@@ -5,6 +5,7 @@ import com.deloitte.cliente.model.entity.Produto;
 import com.deloitte.cliente.model.factory.ProdutoFactory;
 import com.deloitte.cliente.repository.ProdutoRepository;
 import com.deloitte.cliente.service.ProdutoService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +13,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ProdutoServiceImpl implements ProdutoService {
 
-    private final ProdutoRepository produtoRepository;
-
-    @Autowired
-    public ProdutoServiceImpl(ProdutoRepository produtoRepository) {
-        this.produtoRepository = produtoRepository;
-    }
+    private ProdutoRepository produtoRepository;
 
     @Override
     public ProdutoDTO cadastrar(ProdutoDTO dto) {

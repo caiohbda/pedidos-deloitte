@@ -5,19 +5,17 @@ import com.deloitte.cliente.model.entity.Cliente;
 import com.deloitte.cliente.model.factory.ClienteFactory;
 import com.deloitte.cliente.repository.ClienteRepository;
 import com.deloitte.cliente.service.ClienteService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class ClienteServiceImpl implements ClienteService {
 
-    private final ClienteRepository clienteRepository;
-
-    public ClienteServiceImpl(ClienteRepository clienteRepository, ClienteFactory clienteFactory) {
-        this.clienteRepository = clienteRepository;
-    }
+    private ClienteRepository clienteRepository;
 
     @Override
     public ClienteDTO criar(ClienteDTO dto) {

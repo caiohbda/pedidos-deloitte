@@ -10,6 +10,8 @@ import com.deloitte.cliente.repository.ClienteRepository;
 import com.deloitte.cliente.repository.PedidoRepository;
 import com.deloitte.cliente.repository.ProdutoRepository;
 import com.deloitte.cliente.service.PedidoService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +19,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class PedidoServiceImpl implements PedidoService {
 
-    private final PedidoRepository pedidoRepository;
-    private final ClienteRepository clienteRepository;
-    private final ProdutoRepository produtoRepository;
-
-    @Autowired
-    public PedidoServiceImpl(PedidoRepository pedidoRepository,
-                             ClienteRepository clienteRepository,
-                             ProdutoRepository produtoRepository) {
-        this.pedidoRepository = pedidoRepository;
-        this.clienteRepository = clienteRepository;
-        this.produtoRepository = produtoRepository;
-    }
+    private PedidoRepository pedidoRepository;
+    private ClienteRepository clienteRepository;
+    private ProdutoRepository produtoRepository;
 
     @Override
     public PedidoDTO criar(PedidoDTO dto) {
