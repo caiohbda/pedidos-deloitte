@@ -1,6 +1,7 @@
 package com.deloitte.cliente.service.impl;
 
 import com.deloitte.cliente.model.dto.PedidoDTO;
+import com.deloitte.cliente.model.dto.ProdutoDTO;
 import com.deloitte.cliente.model.entity.Cliente;
 import com.deloitte.cliente.model.entity.Pedido;
 import com.deloitte.cliente.model.entity.Produto;
@@ -21,27 +22,36 @@ public class PedidoServiceImpl implements PedidoService {
     private final PedidoRepository pedidoRepository;
     private final ClienteRepository clienteRepository;
     private final ProdutoRepository produtoRepository;
-    private final PedidoFactory pedidoFactory;
 
     @Autowired
     public PedidoServiceImpl(PedidoRepository pedidoRepository,
                              ClienteRepository clienteRepository,
-                             ProdutoRepository produtoRepository,
-                             PedidoFactory pedidoFactory) {
+                             ProdutoRepository produtoRepository) {
         this.pedidoRepository = pedidoRepository;
         this.clienteRepository = clienteRepository;
         this.produtoRepository = produtoRepository;
-        this.pedidoFactory = pedidoFactory;
     }
 
     @Override
     public PedidoDTO criar(PedidoDTO dto) {
         Cliente cliente = clienteRepository.findById(dto.clienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-        Produto produto = produtoRepository.findById(dto.produtoId())
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
-        Pedido pedido = PedidoFactory.fromDTO(dto, cliente, produto);
+        if (dto.produtos() == null || dto.produtos().isEmpty()) {
+            throw new RuntimeException("A lista de produtos não pode ser nula ou vazia");
+        }
+
+        List<Long> produtoIds = dto.produtos().stream()
+                .map(ProdutoDTO::id)
+                .collect(Collectors.toList());
+
+        List<Produto> produtos = produtoRepository.findAllById(produtoIds);
+
+        if (produtos.isEmpty()) {
+            throw new RuntimeException("Produtos não encontrados");
+        }
+
+        Pedido pedido = PedidoFactory.fromDTO(dto, cliente, produtos);
         Pedido salvo = pedidoRepository.save(pedido);
 
         return PedidoFactory.fromEntity(salvo);
@@ -58,7 +68,7 @@ public class PedidoServiceImpl implements PedidoService {
     public PedidoDTO buscarPorId(Long id) {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
-        return pedidoFactory.fromEntity(pedido);
+        return PedidoFactory.fromEntity(pedido);
     }
 
     @Override
@@ -66,16 +76,30 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
+        if (dto.produtos() == null || dto.produtos().isEmpty()) {
+            throw new RuntimeException("A lista de produtos não pode ser nula ou vazia");
+        }
+
+        List<Long> produtoIds = dto.produtos().stream()
+                .map(ProdutoDTO::id)
+                .collect(Collectors.toList());
+
+        List<Produto> produtos = produtoRepository.findAllById(produtoIds);
+
+
+
+        if (produtos.isEmpty()) {
+            throw new RuntimeException("Produtos não encontrados");
+        }
+
         Cliente cliente = clienteRepository.findById(dto.clienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-        Produto produto = produtoRepository.findById(dto.produtoId())
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
         pedido.setCliente(cliente);
-        pedido.setProduto(produto);
+        pedido.setProdutos(produtos);
 
         Pedido atualizado = pedidoRepository.save(pedido);
-        return pedidoFactory.fromEntity(atualizado);
+        return PedidoFactory.fromEntity(atualizado);
     }
 
     @Override

@@ -19,7 +19,6 @@ public class ClienteServiceImpl implements ClienteService {
         this.clienteRepository = clienteRepository;
     }
 
-
     @Override
     public ClienteDTO criar(ClienteDTO dto) {
         Cliente cliente = ClienteFactory.fromDTO(dto);

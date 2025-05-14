@@ -2,6 +2,8 @@ package com.deloitte.cliente.model.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Pedido {
 
@@ -9,11 +11,16 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "produto_id", nullable = false)
-    private Produto produto;
+    @ManyToMany
+    @JoinTable(
+            name = "pedido_produto",
+            joinColumns = @JoinColumn(name = "pedido_id"),
+            inverseJoinColumns = @JoinColumn(name = "produto_id")
+    )
+    private List<Produto> produtos;
 
-    @ManyToOne(optional = false)
+
+    @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
@@ -25,12 +32,12 @@ public class Pedido {
         this.id = id;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public List<Produto> getProdutos() {
+        return produtos;
     }
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
+    public void setProdutos(List<Produto> produtos) {
+        this.produtos = produtos;
     }
 
     public Cliente getCliente() {

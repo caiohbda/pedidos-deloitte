@@ -1,20 +1,12 @@
 package com.deloitte.cliente.model.dto;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
-public record PedidoDTO (
-
+public record PedidoDTO(
         Long id,
-
-        @NotNull(message = "Obrigatório um produto para realizar o pedido")
-        Long produtoId,
-
-        @NotNull(message = "Obrigatório vincular um cliente ao pedido")
+        List<ProdutoDTO> produtos,
         Long clienteId,
-
-        String produtoNome,
-        Double produtoValor,
-
         String clienteNome,
         String clienteEmail
 ) {}
