@@ -1,19 +1,21 @@
 package com.deloitte.cliente.model.factory;
 
 import com.deloitte.cliente.model.dto.ClienteDTO;
-import com.deloitte.cliente.model.dto.ClienteResponseDTO;
 import com.deloitte.cliente.model.entity.Cliente;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ClienteFactory {
+
     public static Cliente fromDTO(ClienteDTO dto) {
         var cliente = new Cliente();
-        cliente.setEmail(dto.email());
         cliente.setNome(dto.nome());
+        cliente.setEmail(dto.email());
         cliente.setPassword(dto.password());
         return cliente;
     }
 
-    public static ClienteResponseDTO fromEntity(Cliente c) {
-        return new ClienteResponseDTO(c.getId() ,c.getNome(), c.getEmail());
+    public static ClienteDTO fromEntity(Cliente c) {
+        return new ClienteDTO(c.getId(), c.getNome(), c.getEmail(), null);
     }
 }

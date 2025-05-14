@@ -3,6 +3,9 @@ package com.deloitte.cliente.model.dto;
 import javax.validation.constraints.NotBlank;
 
 public record ClienteDTO (
+
+        Long id,
+
         @NotBlank(message = "Nome obrigatório")
         String nome,
 

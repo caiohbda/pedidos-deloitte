@@ -1,7 +1,6 @@
 package com.deloitte.cliente.service.impl;
 
 import com.deloitte.cliente.model.dto.ClienteDTO;
-import com.deloitte.cliente.model.dto.ClienteResponseDTO;
 import com.deloitte.cliente.model.entity.Cliente;
 import com.deloitte.cliente.model.factory.ClienteFactory;
 import com.deloitte.cliente.repository.ClienteRepository;
@@ -22,14 +21,14 @@ public class ClienteServiceImpl implements ClienteService {
 
 
     @Override
-    public ClienteResponseDTO criar(ClienteDTO dto) {
+    public ClienteDTO criar(ClienteDTO dto) {
         Cliente cliente = ClienteFactory.fromDTO(dto);
         Cliente salvo = clienteRepository.save(cliente);
         return ClienteFactory.fromEntity(salvo);
     }
 
     @Override
-    public List<ClienteResponseDTO> listarTodos() {
+    public List<ClienteDTO> listarTodos() {
         return clienteRepository.findAll()
                 .stream()
                 .map(ClienteFactory::fromEntity)
@@ -37,14 +36,14 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public ClienteResponseDTO buscarPorId(Long id) {
+    public ClienteDTO buscarPorId(Long id) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         return ClienteFactory.fromEntity(cliente);
     }
 
     @Override
-    public ClienteResponseDTO editar(Long id, ClienteDTO dto) {
+    public ClienteDTO editar(Long id, ClienteDTO dto) {
         Cliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 

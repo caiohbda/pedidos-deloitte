@@ -2,8 +2,11 @@ package com.deloitte.cliente.model.factory;
 
 import com.deloitte.cliente.model.dto.ProdutoDTO;
 import com.deloitte.cliente.model.entity.Produto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProdutoFactory {
+
     public static Produto fromDTO(ProdutoDTO dto) {
         var produto = new Produto();
         produto.setNome(dto.nome());
@@ -12,6 +15,6 @@ public class ProdutoFactory {
     }
 
     public static ProdutoDTO fromEntity(Produto p) {
-        return new ProdutoDTO(p.getNome(), p.getValor());
+        return new ProdutoDTO(p.getId(), p.getNome(), p.getValor());
     }
 }
