@@ -8,5 +8,6 @@ public record PedidoDTO(
         List<ProdutoDTO> produtos,
         Long clienteId,
         String clienteNome,
-        String clienteEmail
+        String clienteEmail,
+        Double valorTotal
 ) {}

@@ -21,17 +21,23 @@ public class PedidoFactory {
     }
 
     public static PedidoDTO fromEntity(Pedido pedido) {
-        List<ProdutoDTO> produtoDTOs = pedido.getProdutos()
-                .stream()
+        List<ProdutoDTO> produtoDTOs = pedido.getProdutos().stream()
                 .map(produto -> new ProdutoDTO(produto.getId(), produto.getNome(), produto.getValor()))
                 .collect(Collectors.toList());
+
+        double valorTotal = Math.round(
+                produtoDTOs.stream()
+                        .mapToDouble(ProdutoDTO::valor)
+                        .sum() * 100.0
+        ) / 100.0;
 
         return new PedidoDTO(
                 pedido.getId(),
                 produtoDTOs,
                 pedido.getCliente().getId(),
                 pedido.getCliente().getNome(),
-                pedido.getCliente().getEmail()
+                pedido.getCliente().getEmail(),
+                valorTotal
         );
     }
 }
